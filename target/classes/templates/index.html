@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+	  lang="ru">
+<head>
+<meta charset="ISO-8859-1">
+<title>Start page</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
+</head>
+<body>
+<div align="center">	
+	<div sec:authorize="isAuthenticated()" id="greetings">
+		Welcome, <b><span sec:authentication="name">Username</span></b>!
+		&nbsp;
+	</div>
+		
+	<form th:action="@{/logout}" method="post">
+		<button class="button-35" role="button" type="submit" value="Logout">Logout</button>
+	</form>
+	
+	<h1>Grade Book</h1>
+	<div sec:authorize="hasAnyAuthority('ADMIN')">
+		<a href="new_mark">Give a marks</a>
+	</div>
+
+	<form th:action="@{/}" sec:authorize="hasAnyAuthority('ADMIN')" method="post">
+<!--		<input type="number" name="num" th:name="semester" placeholder="Choose semester" />-->
+		<div class="form__group field">
+			<input type="number" th:name="semester" class="form__field" placeholder="Choose semester" name="num" id="num"/>
+<!--			<label for="num" class="form__label">Choose semester</label>-->
+		</div>
+		<button class="button-35" role="button" type="submit">Go</button>
+	</form>
+
+	<br/><br/>
+	<table border="1" cellpadding="10" class="fl-table">
+		<thead>
+			<tr>
+				<th>Name</th>
+				<th>Budget</th>
+<!--				<th>Mark</th>-->
+<!--				<th sec:authorize="hasAnyAuthority('STUDENT')">Teacher</th>-->
+<!--				<th sec:authorize="hasAnyAuthority('TEACHER')">Group</th>-->
+<!--				<th sec:authorize="hasAnyAuthority('TEACHER')">Student</th>-->
+
+<!--				<th sec:authorize="hasAnyAuthority('ADMIN', 'STUDENT')">Actions</th>-->
+				
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="project : ${projects}">
+				<td th:text="${project.getName()}">Semester</td>
+				<td th:text="${project.getBudget()}">Subject</td>
+<!--				<td th:text="${project.getMark()}">Mark</td>-->
+<!--				<td sec:authorize="hasAnyAuthority('STUDENT')" th:text="${mark.getTeacherName()}">Teacher</td>-->
+<!--				<td sec:authorize="hasAnyAuthority('TEACHER')" th:text="${mark.getStudent().getGroup().getName()}">Group</td>-->
+<!--				<td sec:authorize="hasAnyAuthority('TEACHER')" th:text="${mark.getStudentName()}">Student</td>-->
+
+				<!--				<td th:text="${product.brand}">Brand</td>-->
+<!--				<td th:text="${product.madein}">Made in</td>-->
+<!--				<td th:text="${product.price}">Price</td>-->
+				
+<!--				<td sec:authorize="hasAnyAuthority('ADMIN', 'EDITOR')">-->
+<!--					<a th:href="@{'/edit/' + ${product.id}}">Edit</a>			-->
+<!--					&nbsp;&nbsp;&nbsp;&nbsp;-->
+<!--					<a sec:authorize="hasAuthority('ADMIN')" th:href="@{'/delete/' + ${product.id}}">Delete</a>-->
+<!--				</td>-->
+			</tr>
+		</tbody>
+	</table>
+</div>
+</body>
+</html>
