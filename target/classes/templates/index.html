@@ -21,19 +21,19 @@
 		<button class="button-35" role="button" type="submit" value="Logout">Logout</button>
 	</form>
 	
-	<h1>Grade Book</h1>
-	<div sec:authorize="hasAnyAuthority('ADMIN')">
-		<a href="new_mark">Give a marks</a>
-	</div>
+<!--	<h1>Grade Book</h1>-->
+<!--	<div sec:authorize="hasAnyAuthority('ADMIN')">-->
+<!--		<a href="new_mark">Give a marks</a>-->
+<!--	</div>-->
 
-	<form th:action="@{/}" sec:authorize="hasAnyAuthority('ADMIN')" method="post">
-<!--		<input type="number" name="num" th:name="semester" placeholder="Choose semester" />-->
-		<div class="form__group field">
-			<input type="number" th:name="semester" class="form__field" placeholder="Choose semester" name="num" id="num"/>
-<!--			<label for="num" class="form__label">Choose semester</label>-->
-		</div>
-		<button class="button-35" role="button" type="submit">Go</button>
-	</form>
+<!--	<form th:action="@{/}" sec:authorize="hasAnyAuthority('ADMIN')" method="post">-->
+<!--&lt;!&ndash;		<input type="number" name="num" th:name="semester" placeholder="Choose semester" />&ndash;&gt;-->
+<!--		<div class="form__group field">-->
+<!--			<input type="number" th:name="semester" class="form__field" placeholder="Choose semester" name="num" id="num"/>-->
+<!--&lt;!&ndash;			<label for="num" class="form__label">Choose semester</label>&ndash;&gt;-->
+<!--		</div>-->
+<!--		<button class="button-35" role="button" type="submit">Go</button>-->
+<!--	</form>-->
 
 	<br/><br/>
 	<table border="1" cellpadding="10" class="fl-table">
