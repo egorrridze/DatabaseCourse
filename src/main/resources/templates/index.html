@@ -4,7 +4,7 @@
 	  lang="ru">
 <head>
 <meta charset="utf-8">
-<title>Start page</title>
+<title>Домашняя страница</title>
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
@@ -32,9 +32,6 @@
 	</form>
 	
 <!--	<h1>Grade Book</h1>-->
-<!--	<div sec:authorize="hasAnyAuthority('ADMIN')">-->
-<!--		<a href="new_mark">Give a marks</a>-->
-<!--	</div>-->
 
 <!--	<form th:action="@{/}" sec:authorize="hasAnyAuthority('ADMIN')" method="post">-->
 <!--&lt;!&ndash;		<input type="number" name="num" th:name="semester" placeholder="Choose semester" />&ndash;&gt;-->
@@ -50,12 +47,32 @@
 		<option value="div1">Проекты</option>
 		<option value="div2">Заказчики</option>
 		<option value="div3">Менеджеры</option>
-		<option value="div4">Программисты</option>
+		<option value="div4">Разработчики</option>
 	</select>
 	<br/><br/>
 
 	<div id="div1">
 	<h2>Проекты</h2>
+
+		<div sec:authorize="hasAnyAuthority('ADMIN')">
+			<a th:href="@{/showNewProjectForm}" class="btn btn-primary btn-sm mb-3"> Добавить новый проект </a>
+		</div>
+
+
+<!--			<form th:action="@{/}" method="get">-->
+<!--				<input type="text" name="keyword" th:text="${keyword}"  placeholder="Название" size="50" >-->
+<!--				<button type="submit" class="btn btn-info" >Поиск</button>-->
+<!--				<button type="submit" class="btn btn-info" >Сброс</button>-->
+<!--			</form>-->
+
+
+		<form th:action="@{/}">
+			<input type="text" name="keyword" id="keyword" th:name="keyword" size="50"  required />
+			&nbsp;
+			<input type="submit" value="Поиск" />
+			&nbsp;
+			<a th:href="@{/}"><input type="button" value="Сброс" id="btnClear" onclick="clearSearch()" /></a>
+		</form>
 
 		<table border="1" cellpadding="10"  class="table table-striped table-responsive-md">
 		<thead>
@@ -64,7 +81,9 @@
 				<th>Бюджет</th>
 				<th>Заказчик</th>
 				<th>Разработчики</th>
-				<th>Действия</th>
+				<div sec:authorize="hasAnyAuthority('ADMIN')">
+					<th>Действия</th>
+				</div>
 <!--				<th>Mark</th>-->
 <!--				<th sec:authorize="hasAnyAuthority('STUDENT')">Teacher</th>-->
 <!--				<th sec:authorize="hasAnyAuthority('TEACHER')">Group</th>-->
@@ -77,9 +96,15 @@
 		<tbody>
 			<tr th:each="project : ${projects}">
 				<td th:text="${project.getName()}">Name</td>
-				<td th:text="${project.getBudget()}">Budget</td>
+				<td th:text="${#numbers.formatDecimal(project.getBudget(), 1, 'WHITESPACE', 0, 'POINT' )}"></td>
 				<td th:text="${project.getCustomer().getName()}">Customer</td>
 				<td th:text="${project.getDevelopersString()}">Projects</td>
+				<div sec:authorize="hasAnyAuthority('ADMIN')">
+					<td> <a th:href="@{/showFormForUpdateProject/{id}(id=${project.getProjectID()})}" class="btn btn-primary">Изменить</a>
+						<a th:href="@{/deleteProject/{id}(id=${project.getProjectID()})}" class="btn btn-danger">Удалить</a>
+					</td>
+				</div>
+
 				<!--				<td th:text="${project.getMark()}">Mark</td>-->
 <!--				<td sec:authorize="hasAnyAuthority('STUDENT')" th:text="${mark.getTeacherName()}">Teacher</td>-->
 <!--				<td sec:authorize="hasAnyAuthority('TEACHER')" th:text="${mark.getStudent().getGroup().getName()}">Group</td>-->
@@ -102,7 +127,16 @@
 
 	<div id="div2">
 	<h2>Заказчики</h2>
-		<a th:href="@{/showNewCustomerForm}" class="btn btn-primary btn-sm mb-3"> Add Customer </a>
+		<div sec:authorize="hasAnyAuthority('ADMIN')">
+			<a th:href="@{/showNewCustomerForm}" class="btn btn-primary btn-sm mb-3"> Добавить нового заказчика </a>
+		</div>
+		<form th:action="@{/}">
+			<input type="text" name="keyword" id="keyword" th:name="keyword" size="50"  required />
+			&nbsp;
+			<input type="submit" value="Поиск" />
+			&nbsp;
+			<a th:href="@{/}"><input type="button" value="Сброс" id="btnClear" onclick="clearSearch()" /></a>
+		</form>
 		<br>
 		<table border="1" cellpadding="10" class="fl-table">
 		<thead>
@@ -110,7 +144,9 @@
 			<th>Название</th>
 			<th>email</th>
 			<th>Проекты</th>
-			<th>Действия</th>
+			<div sec:authorize="hasAnyAuthority('ADMIN')">
+				<th>Действия</th>
+			</div>
 		</tr>
 		</thead>
 		<tbody>
@@ -119,36 +155,103 @@
 		<td th:text="${customer.getEmail()}">email</td>
 		<td th:text="${customer.getProjectsString()}">Projects</td>
 <!--		<td th:each="project : ${customer.getProjects()}" th:text="${project.getName()}">Projects</td>-->
-		<td> <a th:href="@{/showFormForUpdate/{customer_id}(customer_id=${customer.getCustomerID()})}" class="btn btn-primary">Update</a>
-			<a th:href="@{/deleteCustomer/{id}(id=${customer.getCustomerID()})}" class="btn btn-danger">Delete</a>
-		</td>
+			<div sec:authorize="hasAnyAuthority('ADMIN')">
+				<td> <a th:href="@{/showFormForUpdateCustomer/{customer_id}(customer_id=${customer.getCustomerID()})}" class="btn btn-primary">Изменить</a>
+					<a th:href="@{/deleteCustomer/{id}(id=${customer.getCustomerID()})}" class="btn btn-danger">Удалить</a>
+				</td>
+			</div>
+
 		</tr>
 		</tbody>
 	</table>
 	</div>
 
 	<div id="div3">
-	<h2>Managers</h2>
-	<table border="1" cellpadding="10" class="fl-table">
+	<h2>Менеджеры</h2>
+		<div sec:authorize="hasAnyAuthority('ADMIN')">
+			<a th:href="@{/addManager}" class="btn btn-primary btn-sm mb-3"> Добавить нового менеджера </a>
+		</div>
+		<form th:action="@{/}">
+			<input type="text" name="keyword" id="keyword" th:name="keyword" size="50"  required />
+			&nbsp;
+			<input type="submit" value="Поиск" />
+			&nbsp;
+			<a th:href="@{/}"><input type="button" value="Сброс" id="btnClear" onclick="clearSearch()" /></a>
+		</form>
+		<table border="1" cellpadding="10" class="fl-table">
 		<thead>
 		<tr>
-			<th>Surname</th>
-			<th>Name</th>
-			<th>Projects</th>
+			<th>Фамилия</th>
+			<th>Имя</th>
+			<th>Проекты</th>
+			<div sec:authorize="hasAnyAuthority('ADMIN')">
+				<th>Действия</th>
+			</div>
+
 		</tr>
 		</thead>
 		<tbody>
 		<tr th:each="manager : ${managers}">
 			<td th:text="${manager.getSurname()}">Surname</td>
 			<td th:text="${manager.getName()}">Name</td>
-			<td th:each="project : ${manager.getProjects()}" th:text="${project.getName()}">Projects</td>
+			<td th:text="${manager.getProjectsString()}">Projects</td>
+			<div sec:authorize="hasAnyAuthority('ADMIN')">
+				<td> <a th:href="@{/updateManager/{id}(id=${manager.getManagerID()})}" class="btn btn-primary">Изменить</a>
+					<a th:href="@{/deleteManager/{id}(id=${manager.getManagerID()})}" class="btn btn-danger">Удалить</a>
+				</td>
+			</div>
+
 		</tr>
 		</tbody>
 	</table>
 	</div>
 </div>
 
-<div id="div4"></div>
+<div id="div4">
+	<h2>Разработчики</h2>
+
+	<div sec:authorize="hasAnyAuthority('ADMIN')">
+		<a th:href="@{/addDeveloper}" class="btn btn-primary btn-sm mb-3"> Добавить нового разработчика </a>
+	</div>
+
+	<form th:action="@{/}">
+		<input type="text" name="keyword" id="keyword" th:name="keyword" size="50"  required />
+		&nbsp;
+		<input type="submit" value="Поиск" />
+		&nbsp;
+		<a th:href="@{/}"><input type="button" value="Сброс" id="btnClear" onclick="clearSearch()" /></a>
+	</form>
+	<table border="1" cellpadding="10" class="fl-table">
+		<thead>
+		<tr>
+			<th>Фамилия</th>
+			<th>Имя</th>
+			<th>Зарплата</th>
+			<th>Должность</th>
+			<th>Используемое IDE</th>
+			<div sec:authorize="hasAnyAuthority('ADMIN')">
+				<th>Действия</th>
+			</div>
+
+		</tr>
+		</thead>
+		<tbody>
+		<tr th:each="developer : ${developers}">
+			<td th:text="${developer.getSurname()}">Surname</td>
+			<td th:text="${developer.getName()}">Name</td>
+			<td th:text="${#numbers.formatDecimal(developer.getSalary(), 1, 'WHITESPACE', 0, 'POINT' )}">Salary</td>
+			<td th:text="${developer.getPosition()}">Position</td>
+			<td th:text="${developer.getIDE().getName()}">IDE</td>
+			<div sec:authorize="hasAnyAuthority('ADMIN')">
+				<td> <a th:href="@{/updateDeveloper/{id}(id=${developer.getDeveloperID()})}" class="btn btn-primary">Изменить</a>
+					<a th:href="@{/deleteDeveloper/{id}(id=${developer.getDeveloperID()})}" class="btn btn-danger">Удалить</a>
+				</td>
+			</div>
+
+		</tr>
+		</tbody>
+	</table>
+</div>
 </body>
 </html>
 
@@ -172,8 +275,4 @@
 		return form;
 	}
 
-	async function create() {
-		let form = fillForm();
-		let table = document.getElementById('tables').value;
-	}
 </script>

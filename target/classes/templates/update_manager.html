@@ -11,18 +11,19 @@
 
 <body>
 <div class="container">
-  <h1>Управление заказчиком</h1>
+  <h1>Управление менеджером</h1>
   <hr>
-  <h2>Изменить заказчика</h2>
+  <h2>Изменить менеджера</h2>
 
-  <form action="#" th:action="@{/saveCustomer}" th:object="${customer}" method="POST">
+  <form action="#" th:action="@{/saveManager}" th:object="${manager}" method="POST">
 
     <!-- Add hidden form field to handle update -->
-    <input type="hidden" th:field="*{customerID}" />
+    <input type="hidden" th:field="*{managerID}" />
+
+    <input type="text" th:field="*{surname}" class="form-control mb-4 col-4">
 
     <input type="text" th:field="*{name}" class="form-control mb-4 col-4">
 
-    <input type="email" th:field="*{email}" class="form-control mb-4 col-4">
 
     <button type="submit" class="btn btn-info col-2"> Сохранить</button>
   </form>

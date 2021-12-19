@@ -27,6 +27,19 @@ public class Manager {
     @Column(name = "name")
     private String name;
 
+    public String getSurnameName() {
+        return this.surname + " " + this.getName();
+    }
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "manager")
     private Set<Project> projects;
+
+    public String getProjectsString() {
+        String projectString = "";
+        for (Project p : projects) {
+            projectString += p.getName() + ", ";
+        }
+        return projectString.isEmpty() ? projectString : projectString.substring(0, projectString.length() - 2);
+    }
+
 }

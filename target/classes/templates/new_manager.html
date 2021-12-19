@@ -9,15 +9,14 @@
 
 <body>
 <div class="container">
-    <h1>Управление заказчиком</h1>
+    <h1>Управление менеджером</h1>
     <hr>
-    <h2>Добавить заказчика</h2>
+    <h2>Добавить менеджера</h2>
 
-    <form action="#" th:action="@{/saveCustomer}" th:object="${customer}" method="POST">
+    <form action="#" th:action="@{/saveManager}" th:object="${manager}" method="POST">
+        <input type="text" th:field="*{surname}" placeholder="Фамилия" class="form-control mb-4 col-4">
 
-        <input type="text" th:field="*{name}" placeholder="Название или имя" class="form-control mb-4 col-4">
-
-        <input type="email" th:field="*{email}" placeholder="Email" class="form-control mb-4 col-4">
+        <input type="text" th:field="*{name}" placeholder="Имя" class="form-control mb-4 col-4">
 
         <button type="submit" class="btn btn-info col-2"> Сохранить</button>
     </form>

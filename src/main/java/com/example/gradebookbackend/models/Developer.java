@@ -33,6 +33,10 @@ public class Developer {
     @Column(name = "position")
     private String position;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ide_id")
+    private IDE IDE;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
             name = "developers_projects",
@@ -41,5 +45,18 @@ public class Developer {
             schema = "public"
     )
     private Set<Project> projects;
+
+    public String getSurnameName() {
+        return this.surname + " " + this.getName();
+    }
+
+    public String getProjectsString() {
+        String projectString = "";
+        for (Project p : projects) {
+            projectString += p.getName() + ", ";
+        }
+        return projectString.isEmpty() ? projectString : projectString.substring(0, projectString.length() - 2);
+    }
+
 
 }

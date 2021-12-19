@@ -45,6 +45,5 @@ public class Project {
             developersString += p.getSurname() + " " + p.getName() + ", ";
         }
         return developersString.isEmpty() ? developersString : developersString.substring(0, developersString.length() - 2);
-
     }
 }
